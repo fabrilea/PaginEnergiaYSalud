@@ -1,0 +1,126 @@
+{
+  "usuarios": {
+    "u1": {
+      "id": "u1",
+      "dni": "11111111",
+      "nombre": "Juan",
+      "apellido": "Pérez"
+    },
+    "u2": {
+      "id": "u2",
+      "dni": "22222222",
+      "nombre": "Ana",
+      "apellido": "García"
+    }
+  },
+  "rutinas": {
+    "r1": {
+      "id": "r1",
+      "nombre": "Pecho y bíceps",
+      "descripcion": "Rutina enfocada en fuerza de tren superior",
+      "ejercicios": [
+        {
+          "id": "re1",
+          "ejercicioId": "e1",
+          "nombre": "Press banca",
+          "series": 4,
+          "repeticiones": 10,
+          "pesoSugerido": 40,
+          "videoUrl": "https://www.youtube.com/watch?v=rT7DgCr-3pg"
+        },
+        {
+          "id": "re2",
+          "ejercicioId": "e2",
+          "nombre": "Curl bíceps",
+          "series": 3,
+          "repeticiones": 12,
+          "pesoSugerido": 10,
+          "videoUrl": "https://www.youtube.com/watch?v=ykJmrZ5v0Oo"
+        }
+      ],
+      "historial": [
+        {
+          "id": "h1",
+          "usuarioId": "u1",
+          "rutinaId": "r1",
+          "ejercicioId": "e1",
+          "pesoUsado": 40,
+          "repeticionesRealizadas": 10,
+          "fecha": "2025-09-20"
+        },
+        {
+          "id": "h2",
+          "usuarioId": "u1",
+          "rutinaId": "r1",
+          "ejercicioId": "e2",
+          "pesoUsado": 12,
+          "repeticionesRealizadas": 12,
+          "fecha": "2025-09-22"
+        }
+      ]
+    },
+    "r2": {
+      "id": "r2",
+      "nombre": "Piernas",
+      "descripcion": "Rutina de tren inferior",
+      "ejercicios": [
+        {
+          "id": "re3",
+          "ejercicioId": "e3",
+          "nombre": "Sentadillas",
+          "series": 4,
+          "repeticiones": 8,
+          "pesoSugerido": 60,
+          "videoUrl": "https://www.youtube.com/watch?v=1xMaFs0L3ao"
+        }
+      ],
+      "historial": []
+    }
+  },
+  "ejercicios": {
+    "e1": {
+      "id": "e1",
+      "nombre": "Press banca",
+      "descripcion": "Ejercicio de pecho",
+      "series": 4,
+      "repeticiones": 10,
+      "pesoRecomendado": 40,
+      "videoUrl": "https://www.youtube.com/watch?v=rT7DgCr-3pg"
+    },
+    "e2": {
+      "id": "e2",
+      "nombre": "Curl bíceps",
+      "descripcion": "Ejercicio de bíceps",
+      "series": 3,
+      "repeticiones": 12,
+      "pesoRecomendado": 10,
+      "videoUrl": "https://www.youtube.com/watch?v=ykJmrZ5v0Oo"
+    },
+    "e3": {
+      "id": "e3",
+      "nombre": "Sentadillas",
+      "descripcion": "Ejercicio de piernas",
+      "series": 4,
+      "repeticiones": 8,
+      "pesoRecomendado": 60,
+      "videoUrl": "https://www.youtube.com/watch?v=1xMaFs0L3ao"
+    }
+  },
+  "usuarioRutinas": {
+    "ur1": {
+      "id": "ur1",
+      "usuarioId": "u1",
+      "rutinaId": "r1"
+    },
+    "ur2": {
+      "id": "ur2",
+      "usuarioId": "u1",
+      "rutinaId": "r2"
+    },
+    "ur3": {
+      "id": "ur3",
+      "usuarioId": "u2",
+      "rutinaId": "r2"
+    }
+  }
+}

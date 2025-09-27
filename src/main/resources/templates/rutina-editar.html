@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Editar Rutina</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container py-3">
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<h2 class="mb-4 text-center">Editar Rutina</h2>
+
+<form th:action="@{/admin/rutinas/{id}/editar(id=${rutina.id})}" method="post">
+
+    <!-- Nombre -->
+    <div class="mb-3">
+        <label class="form-label">Nombre</label>
+        <input type="text" name="nombre" class="form-control" th:value="${rutina.nombre}" required>
+    </div>
+
+    <!-- Descripción -->
+    <div class="mb-3">
+        <label class="form-label">Descripción</label>
+        <input type="text" name="descripcion" class="form-control" th:value="${rutina.descripcion}">
+    </div>
+
+    <hr>
+
+    <h5>Ejercicios (máx 5)</h5>
+
+    <!-- Recorremos hasta 5 filas -->
+    <div th:each="i : ${#numbers.sequence(0,4)}" class="row g-2 mb-2">
+        <div class="col-md-4">
+            <select class="form-select" name="ejercicioId">
+                <option value="">-- Seleccionar --</option>
+                <option th:each="e : ${ejercicios}"
+                        th:value="${e.id}"
+                        th:text="${e.nombre}"
+                        th:selected="${i < rutinaEjercicios.size()} ? (${e.id} == ${rutinaEjercicios[i].ejercicioId}) : false">
+                </option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <input type="number" class="form-control"
+                   name="repeticiones" placeholder="Reps"
+                   th:value="${i < rutinaEjercicios.size()} ? ${rutinaEjercicios[i].repeticiones} : ''">
+        </div>
+        <div class="col-md-2">
+            <input type="number" step="0.5" class="form-control"
+                   name="peso" placeholder="Peso (kg)"
+                   th:value="${i < rutinaEjercicios.size()} ? ${rutinaEjercicios[i].pesoSugerido} : ''">
+        </div>
+        <div class="col-md-2">
+            <input type="number" class="form-control"
+                   name="vueltas" placeholder="Vueltas"
+                   th:value="${i < rutinaEjercicios.size()} ? ${rutinaEjercicios[i].vueltas} : ''">
+        </div>
+    </div>
+
+    <div class="mt-3 d-flex justify-content-between">
+        <a th:href="@{/admin/rutinas}" class="btn btn-secondary">Cancelar</a>
+        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+    </div>
+</form>
+
+</body>
+</html>

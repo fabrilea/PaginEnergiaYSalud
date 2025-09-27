@@ -1,0 +1,4 @@
+runtime: java17   # o java21 si estás en esa versión
+instance_class: F1  # clase mínima (gratis/low cost)
+env: standard
+entrypoint: java -jar gimnasio-web-0.0.1-SNAPSHOT.jar
