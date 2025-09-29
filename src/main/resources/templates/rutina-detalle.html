@@ -21,8 +21,8 @@
             - <span th:text="${e.repeticiones} + ' reps, ' + ${e.pesoSugerido} + ' kg, ' + ${e.vueltas} + ' vueltas'"></span>
 
             <!-- Solo mostrar si hay link -->
-            <span th:if="${e.descripcion != null and !e.descripcion.isEmpty()}">
-                | <a th:href="${e.descripcion}" target="_blank" class="text-decoration-none">
+            <span th:if="${e.ejercicioDescripcion != null and !e.ejercicioDescripcion.isEmpty()}">
+                | <a th:href="${e.ejercicioDescripcion}" target="_blank" class="btn btn-sm btn-outline-primary">
                     <i class="bi bi-play-circle-fill"></i> Ver video
                   </a>
             </span>
