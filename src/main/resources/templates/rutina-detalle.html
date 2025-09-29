@@ -17,9 +17,19 @@
 <ul th:if="${rutinaEjercicios != null and !rutinaEjercicios.isEmpty()}">
     <li th:each="e : ${rutinaEjercicios}">
         <strong th:text="${e.ejercicioNombre}"></strong>
-        <span th:text="' - ' + ${e.repeticiones} + ' reps, ' + ${e.pesoSugerido} + ' kg, ' + ${e.vueltas} + ' vueltas'"></span>
+        <span>
+            - <span th:text="${e.repeticiones} + ' reps, ' + ${e.pesoSugerido} + ' kg, ' + ${e.vueltas} + ' vueltas'"></span>
+
+            <!-- Solo mostrar si hay link -->
+            <span th:if="${e.descripcion != null and !e.descripcion.isEmpty()}">
+                | <a th:href="${e.descripcion}" target="_blank" class="text-decoration-none">
+                    <i class="bi bi-play-circle-fill"></i> Ver video
+                  </a>
+            </span>
+        </span>
     </li>
 </ul>
+
 <p th:if="${rutinaEjercicios == null or rutinaEjercicios.isEmpty()}" class="text-muted">
     Esta rutina no tiene ejercicios cargados.
 </p>
