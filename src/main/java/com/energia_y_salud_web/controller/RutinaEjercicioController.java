@@ -4,12 +4,14 @@ import com.energia_y_salud_web.model.RutinaEjercicio;
 import com.energia_y_salud_web.service.FirebaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/rutina-ejercicios")
+@PreAuthorize("hasAnyRole('ADMIN')")
 public class RutinaEjercicioController {
 
     @Autowired

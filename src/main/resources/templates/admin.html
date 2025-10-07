@@ -10,30 +10,40 @@
 
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
+<h1 class="mb-4 text-center">Panel de Administración</h1>
 
+<!-- 🧑 Nombre del admin -->
+<div id="adminInfo" class="text-center mb-4">
+  <h5>Bienvenido, <span id="adminNombre"></span></h5>
+</div>
 
-  <h1 class="mb-4 text-center">Panel de Administración</h1>
-
-  <div class="row g-4 justify-content-center">
-    <div class="col-12 col-md-3">
-      <a th:href="@{/admin/usuarios}" class="btn btn-primary w-100 py-3">
-        👥 Gestionar Usuarios
-      </a>
-    </div>
-    <div class="col-12 col-md-3">
-      <a th:href="@{/admin/rutinas}" class="btn btn-success w-100 py-3">
-        🏋️‍♂️ Gestionar Rutinas
-      </a>
-    </div>
-    <div class="col-12 col-md-3">
-      <a th:href="@{/admin/ejercicios}" class="btn btn-warning w-100 py-3">
-        📋 Ver Ejercicios
-      </a>
-    </div>
+<!-- 🔘 Acciones principales -->
+<div class="row g-4 justify-content-center">
+  <div class="col-12 col-md-3">
+    <a th:href="@{/admin/usuarios}" class="btn btn-primary w-100 py-3">
+      👥 Gestionar Usuarios
+    </a>
   </div>
+  <div class="col-12 col-md-3">
+    <a th:href="@{/admin/rutinas}" class="btn btn-success w-100 py-3">
+      🏋️‍♂️ Gestionar Rutinas
+    </a>
+  </div>
+  <div class="col-12 col-md-3">
+    <a th:href="@{/admin/ejercicios}" class="btn btn-warning w-100 py-3">
+      📋 Ver Ejercicios
+    </a>
+  </div>
+</div>
 
+<!-- 🚪 Logout -->
+<div class="text-center mt-5">
+  <button id="logoutBtn" class="btn btn-outline-danger px-4">Cerrar sesión</button>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script th:src="@{/js/navbar.js}"></script>
+<script th:src="@{/js/admin.js}"></script>
+
 </body>
 </html>

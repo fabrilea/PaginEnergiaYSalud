@@ -7,12 +7,14 @@ import com.energia_y_salud_web.service.RutinaService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @Controller
 @RequestMapping("/admin/ejercicios")
+@PreAuthorize("hasRole('ADMIN')")
 public class EjercicioController {
 
     private final EjercicioService ejercicioService;

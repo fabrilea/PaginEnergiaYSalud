@@ -1,31 +1,21 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // 👤 Confirmar eliminar usuario
+    // Confirmar eliminación de usuario
     document.querySelectorAll("form.eliminar-usuario").forEach(form => {
-        form.addEventListener("submit", e => {
-            e.preventDefault();
-            const dni = form.getAttribute("data-dni") || "desconocido";
-            if (confirm(`¿Estás seguro de que querés eliminar al usuario con DNI ${dni}?`)) {
-                form.submit();
-            }
-        });
+      form.addEventListener("submit", e => {
+        const dni = form.getAttribute("data-dni") || "desconocido";
+        if (!confirm(`¿Estás seguro de que querés eliminar al usuario con DNI ${dni}?`)) {
+          e.preventDefault();
+        }
+      });
     });
-
-    // 🗑️ Confirmar quitar rutina
+  
+    // Confirmar quitar rutina
     document.querySelectorAll("form.quitar-rutina").forEach(form => {
-        form.addEventListener("submit", e => {
-            e.preventDefault();
-            if (confirm("¿Seguro que quieres quitar esta rutina del usuario?")) {
-                form.submit();
-            }
-        });
+      form.addEventListener("submit", e => {
+        if (!confirm("¿Seguro que querés quitar esta rutina del usuario?")) {
+          e.preventDefault();
+        }
+      });
     });
-});
-document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll(".eliminar-usuario, .quitar-rutina").forEach(form => {
-        form.addEventListener("submit", e => {
-            if (!confirm("¿Seguro que deseas continuar?")) {
-                e.preventDefault();
-            }
-        });
-    });
-});
+  });
+  

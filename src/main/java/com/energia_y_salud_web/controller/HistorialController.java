@@ -5,12 +5,14 @@ import com.energia_y_salud_web.service.FirebaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @Controller
 @RequestMapping("/historial")
+@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
 public class HistorialController {
 
     private final FirebaseService firebaseService;

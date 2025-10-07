@@ -5,6 +5,7 @@ import com.energia_y_salud_web.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.*;
 import java.util.concurrent.ExecutionException;
@@ -12,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 @Controller
 @RequestMapping("/admin/rutinas")
+@PreAuthorize("hasRole('ADMIN')")
 public class RutinaController {
 
     private final RutinaService rutinaService;
