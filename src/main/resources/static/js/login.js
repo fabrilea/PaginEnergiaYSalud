@@ -7,6 +7,12 @@ document.addEventListener("DOMContentLoaded", function() {
       return;
     }
   
+    // 🧹 Limpia mensaje si el usuario vuelve a escribir
+    ["dni", "password"].forEach(id => {
+      const input = document.getElementById(id);
+      input.addEventListener("input", () => mensaje.textContent = "");
+    });
+  
     form.addEventListener("submit", async function(e) {
       e.preventDefault();
       mensaje.textContent = "";
