@@ -5,14 +5,20 @@ import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Controller
 public class ErrorControllerImpl implements ErrorController {
+
+    private static final Logger logger = LoggerFactory.getLogger(ErrorControllerImpl.class);
 
     @GetMapping("/error")
     public String handleError(HttpServletRequest request, Model model) {
         Object statusObj = request.getAttribute("jakarta.servlet.error.status_code");
         int status = statusObj != null ? (Integer) statusObj : 0;
+
+        logger.warn("⚠️ Error HTTP {} detectado en {}", status, request.getRequestURI());
 
         switch (status) {
             case 403 -> {
