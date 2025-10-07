@@ -24,14 +24,23 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/**").permitAll() // login y registro públicos
+                // 🔓 Páginas y recursos públicos
+                .requestMatchers("/", "/login", "/error", "/error/**").permitAll()
+                .requestMatchers("/auth/**").permitAll() // login, register, refresh token
+                .requestMatchers("/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
+
+                // 🔒 Rutas protegidas por rol
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers("/usuario/**").hasAnyRole("USER", "ADMIN")
+
+                // 🔒 Cualquier otra ruta requiere autenticación
                 .anyRequest().authenticated()
             )
-            .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+            // 🔒 Política stateless (sin sesiones)
+            .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            // 🔒 Filtro JWT
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
-        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
