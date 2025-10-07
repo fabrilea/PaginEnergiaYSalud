@@ -54,10 +54,22 @@ export function checkToken(requiredRoles = null) {
   /**
    * Limpia el token y redirige al login.
    */
-  export function logout() {
+  export async function logout() {
+    try {
+      // 🔹 Llama al backend para eliminar cookie
+      await fetch("/auth/logout", { method: "POST" });
+    } catch (err) {
+      console.warn("No se pudo comunicar con el servidor al cerrar sesión:", err);
+    }
+  
+    // 🔹 Limpia cualquier token en el frontend
     localStorage.removeItem("token");
-    window.location.href = "/login";
+    sessionStorage.clear();
+  
+    // 🔹 Redirige sin dejar HTML previo visible
+    window.location.replace("/login");
   }
+  
   
   /**
  * Envoltorio de fetch() que envía el token JWT automáticamente.
