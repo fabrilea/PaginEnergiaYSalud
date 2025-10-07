@@ -1,6 +1,6 @@
-import { checkToken, fetchWithAuth, logout } from "./auth.js";
+import { checkToken, logout } from "./auth.js";
 
-document.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener("DOMContentLoaded", () => {
   // ✅ 1. Verificar token y rol ADMIN
   const payload = checkToken("ADMIN");
   if (!payload) return;
@@ -14,17 +14,5 @@ document.addEventListener("DOMContentLoaded", async () => {
   const logoutBtn = document.getElementById("logoutBtn");
   if (logoutBtn) logoutBtn.addEventListener("click", logout);
 
-  // ✅ 4. Cargar datos del panel (ejemplo)
-  try {
-    const res = await fetchWithAuth("/admin");
-    if (res.ok) {
-      const html = await res.text();
-      console.log("Panel cargado correctamente.");
-      // Podés renderizar algo dinámico si querés
-    } else {
-      console.warn("No se pudo cargar el panel admin.");
-    }
-  } catch (err) {
-    console.error("Error al cargar panel admin:", err);
-  }
+  console.log("✅ Sesión válida como ADMIN.");
 });
