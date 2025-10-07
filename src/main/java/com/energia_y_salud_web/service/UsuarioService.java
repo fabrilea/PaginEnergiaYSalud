@@ -203,4 +203,29 @@ public class UsuarioService {
 
         return future;
     }
+
+    public void actualizarRol(String dni, String nuevoRol) {
+        try {
+            DatabaseReference ref = FirebaseDatabase.getInstance()
+                .getReference("usuarios")
+                .child(dni)
+                .child("rol");
+            ref.setValueAsync(nuevoRol);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void actualizarPassword(String dni, String nuevaPassword) {
+        try {
+            DatabaseReference ref = FirebaseDatabase.getInstance()
+                .getReference("usuarios")
+                .child(dni)
+                .child("password");
+            ref.setValueAsync(nuevaPassword);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
 }
