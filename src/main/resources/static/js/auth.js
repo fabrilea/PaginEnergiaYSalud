@@ -27,17 +27,20 @@ export function checkToken(requiredRoles = null) {
       }
   
       // 🧩 Validar rol si se especifica
-      if (requiredRoles) {
-        // Acepta string ("ADMIN") o array (["USER", "ADMIN"])
+    if (requiredRoles) {
         const roles = Array.isArray(requiredRoles) ? requiredRoles : [requiredRoles];
-  
         if (!roles.includes(payload.rol)) {
-          alert("Acceso denegado: no tienes permiso para ver esta página.");
-          localStorage.removeItem("token");
-          window.location.href = "/login";
-          return null;
+        // 🔁 Redirección gentil según rol, sin borrar token:
+        if (payload.rol === "ADMIN") {
+            window.location.href = "/admin";
+        } else {
+            const dni = payload.dni || payload.sub || "";
+            window.location.href = dni ? `/usuario/${dni}` : "/usuario";
         }
-      }
+        return null;
+        }
+    }
+  
   
       return payload; // ✅ Devuelve los datos decodificados
     } catch (err) {
