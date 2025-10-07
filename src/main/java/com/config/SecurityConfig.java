@@ -14,7 +14,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandlerImpl;
-import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 
 @Configuration
 @EnableMethodSecurity(prePostEnabled = true)
@@ -28,45 +27,48 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/login", "/error", "/error/**").permitAll()
-                .requestMatchers("/auth/**").permitAll()
+                // 🟢 Recursos públicos
+                .requestMatchers("/", "/login", "/error", "/error/**", "/auth/**").permitAll()
                 .requestMatchers("/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
-                .requestMatchers("/admin").permitAll()
+
+                // 🟢 Vistas principales (permitidas, se validan con JS)
+                .requestMatchers("/admin", "/usuario").permitAll()
+
+                // 🔒 Endpoints protegidos
                 .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers("/usuario").permitAll()
                 .requestMatchers("/usuario/**").hasAnyRole("USER", "ADMIN")
+
+                // 🔒 Todo lo demás requiere autenticación
                 .anyRequest().authenticated()
             )
 
-            // 🚫 Sin sesiones (JWT)
+            // 🚫 JWT → sin sesión
             .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
             // ⚠️ Manejo de errores visual con Thymeleaf
             .exceptionHandling(ex -> ex
-                .authenticationEntryPoint(authenticationEntryPoint()) // sin token → 401
-                .accessDeniedHandler(accessDeniedHandler())           // sin permiso → 403
+                .authenticationEntryPoint(authenticationEntryPoint()) // sin token → login
+                .accessDeniedHandler(accessDeniedHandler())           // sin permiso → error
             )
 
-            // 🔒 Filtro JWT
+            // 🔒 Agregar filtro JWT antes del auth estándar
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
-    // 🔸 403 → redirigir a /error (Thymeleaf)
+    // 🔸 403 → redirigir a /error (usa tu ErrorControllerImpl)
     @Bean
     public AccessDeniedHandler accessDeniedHandler() {
         AccessDeniedHandlerImpl handler = new AccessDeniedHandlerImpl();
-        handler.setErrorPage("/error"); // usa ErrorControllerImpl
+        handler.setErrorPage("/error");
         return handler;
     }
 
-    // 🔸 401 → redirigir al login
+    // 🔸 401 → redirigir al login (solo si intenta acceder sin token)
     @Bean
     public AuthenticationEntryPoint authenticationEntryPoint() {
-        return (request, response, authException) -> {
-            response.sendRedirect("/login");
-        };
+        return (request, response, authException) -> response.sendRedirect("/login");
     }
 
     @Bean
