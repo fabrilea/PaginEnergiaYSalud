@@ -34,8 +34,10 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String path = request.getServletPath();
 
-        // Ignorar recursos estáticos
-        if (path.startsWith("/css") || path.startsWith("/js") || path.startsWith("/images") || path.startsWith("/favicon")) {
+        // ⛔ Ignorar recursos estáticos
+        if (path.startsWith("/css") || path.startsWith("/js") ||
+            path.startsWith("/images") || path.startsWith("/favicon") ||
+            path.startsWith("/auth") || path.equals("/login")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -51,23 +53,28 @@ public class JwtFilter extends OncePerRequestFilter {
                     String username = claims.getSubject();
                     String rol = claims.get("rol", String.class);
 
-                    logger.info("✅ Token válido para usuario: {} (rol: {})", username, rol);
+                    logger.info("🔐 [{}] Acceso con token válido → usuario={}, rol={}, ruta={}",
+                            request.getMethod(), username, rol, path);
 
                     UsernamePasswordAuthenticationToken auth =
-                            new UsernamePasswordAuthenticationToken(username, null,
-                                    Collections.singleton(() -> "ROLE_" + rol));
+                            new UsernamePasswordAuthenticationToken(
+                                    username,
+                                    null,
+                                    Collections.singleton(() -> "ROLE_" + rol)
+                            );
 
                     auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(auth);
+
                 } else {
-                    logger.warn("⚠️ Token inválido recibido en {}", path);
+                    logger.warn("⚠️ Token inválido → ruta={}, header={}", path, authHeader);
                 }
             } catch (Exception e) {
-                logger.error("❌ Error al validar token en {}: {}", path, e.getMessage());
+                logger.error("❌ Error al procesar token en {} → {}", path, e.getMessage());
             }
 
         } else {
-            logger.debug("🔸 Sin token (ruta: {})", path);
+            logger.debug("🔸 Sin token JWT en {} {}", request.getMethod(), path);
         }
 
         filterChain.doFilter(request, response);
