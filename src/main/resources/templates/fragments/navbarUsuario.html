@@ -1,33 +1,29 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-<div th:fragment="navbar">
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+<div th:fragment="navbarUsuario">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
     <div class="container-fluid">
-      <a class="navbar-brand" th:href="@{/admin}">Panel Admin</a>
+      <a class="navbar-brand" th:href="@{/usuario/{dni}(dni=${usuario.dni})}">
+        🏋️ Gimnasio - Mi Cuenta
+      </a>
 
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarUser"
+              aria-controls="navbarUser" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <div class="collapse navbar-collapse" id="navbarNav">
+      <div class="collapse navbar-collapse" id="navbarUser">
         <ul class="navbar-nav me-auto">
           <li class="nav-item">
-            <a class="nav-link" th:href="@{/admin/usuarios}">Usuarios</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" th:href="@{/admin/rutinas}">Rutinas</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" th:href="@{/admin/ejercicios}">Ejercicios</a>
+            <a class="nav-link" th:href="@{/usuario/{dni}(dni=${usuario.dni})}">Mis Rutinas</a>
           </li>
         </ul>
 
-        <!-- 🔒 Info del usuario y Logout -->
+        <!-- 🔒 Info del usuario y logout -->
         <div class="d-flex align-items-center text-light">
           <span id="navUser" class="me-3 small"></span>
-          <button id="navLogoutBtn" class="btn btn-outline-danger btn-sm">Cerrar sesión</button>
+          <button id="navLogoutBtn" class="btn btn-outline-light btn-sm">Cerrar sesión</button>
         </div>
       </div>
     </div>
@@ -43,7 +39,7 @@
 
       try {
         const payload = JSON.parse(atob(token.split(".")[1]));
-        const nombre = payload.nombre || payload.sub || payload.dni || "Admin";
+        const nombre = payload.nombre || payload.sub || payload.dni || "Usuario";
 
         const navUser = document.getElementById("navUser");
         if (navUser) navUser.textContent = `👤 ${nombre} (${payload.rol})`;

@@ -3,7 +3,7 @@
  * Módulo centralizado para validación de tokens JWT y control de sesión.
  */
 
-export function checkToken(requiredRole = null) {
+export function checkToken(requiredRoles = null) {
     const token = localStorage.getItem("token");
   
     // 🟥 No hay token → redirigir a login
@@ -18,7 +18,7 @@ export function checkToken(requiredRole = null) {
       const exp = payload.exp * 1000;
       const ahora = Date.now();
   
-      // 🕒 Expirado
+      // 🕒 Token expirado
       if (ahora > exp) {
         alert("Tu sesión ha expirado. Por favor, inicia sesión nuevamente.");
         localStorage.removeItem("token");
@@ -26,15 +26,20 @@ export function checkToken(requiredRole = null) {
         return null;
       }
   
-      // 🧩 Validar rol (si se especifica)
-      if (requiredRole && payload.rol !== requiredRole) {
-        alert(`Acceso denegado: se requiere rol ${requiredRole}.`);
-        localStorage.removeItem("token");
-        window.location.href = "/login";
-        return null;
+      // 🧩 Validar rol si se especifica
+      if (requiredRoles) {
+        // Acepta string ("ADMIN") o array (["USER", "ADMIN"])
+        const roles = Array.isArray(requiredRoles) ? requiredRoles : [requiredRoles];
+  
+        if (!roles.includes(payload.rol)) {
+          alert("Acceso denegado: no tienes permiso para ver esta página.");
+          localStorage.removeItem("token");
+          window.location.href = "/login";
+          return null;
+        }
       }
   
-      return payload; // ✅ Devuelve los datos decodificados del usuario
+      return payload; // ✅ Devuelve los datos decodificados
     } catch (err) {
       console.error("Error al validar token:", err);
       localStorage.removeItem("token");

@@ -8,27 +8,32 @@
 </head>
 <body class="container py-3">
 
-<h2 class="text-center mb-4">
-  Bienvenido <span th:text="${usuario.nombre + ' ' + usuario.apellido}"></span>
-</h2>
+  <div th:replace="~{fragments/navbarUsuario :: navbarUsuario}"></div>
 
-<h4 class="mb-3">Tus Rutinas</h4>
 
-<!-- Mensaje si no tiene rutinas -->
-<div th:if="${#lists.isEmpty(rutinas)}">
-  <p class="text-muted">Aún no tienes rutinas asignadas.</p>
-</div>
+  <h2 class="text-center mb-4">
+    Bienvenido <span id="usuarioNombre" th:text="${usuario.nombre + ' ' + usuario.apellido}"></span>
+  </h2>
 
-<!-- Lista de rutinas -->
-<div th:unless="${#lists.isEmpty(rutinas)}" class="list-group">
-  <a th:each="r : ${rutinas}"
-     th:href="@{/usuario/{dni}/rutina/{id}(dni=${usuario.dni}, id=${r.id})}"
-     class="list-group-item list-group-item-action">
-    <span th:text="${r.nombre}"></span>
-  </a>
-</div>
+  <h4 class="mb-3">Tus Rutinas</h4>
 
-<a href="/" class="btn btn-secondary mt-4 w-100">Salir</a>
+  <!-- Mensaje si no tiene rutinas -->
+  <div th:if="${#lists.isEmpty(rutinas)}">
+    <p class="text-muted">Aún no tienes rutinas asignadas.</p>
+  </div>
 
+  <!-- Lista de rutinas -->
+  <div th:unless="${#lists.isEmpty(rutinas)}" class="list-group">
+    <a th:each="r : ${rutinas}"
+       th:href="@{/usuario/{dni}/rutina/{id}(dni=${usuario.dni}, id=${r.id})}"
+       class="list-group-item list-group-item-action">
+      <span th:text="${r.nombre}"></span>
+    </a>
+  </div>
+
+  <!-- 🔒 Botón salir -->
+  <button id="salirBtn" class="btn btn-danger mt-4 w-100">Cerrar sesión</button>
+
+<script type="module" th:src="@{/js/usuario.js}"></script>
 </body>
 </html>
