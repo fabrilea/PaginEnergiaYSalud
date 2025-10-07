@@ -1,14 +1,23 @@
-import { checkToken, logout } from "./auth.js";
-
 document.addEventListener("DOMContentLoaded", () => {
-  const payload = checkToken("ADMIN");
-  if (!payload) return; // ya redirige si falla
-
-  const nombre = payload.nombre || payload.sub || payload.dni || "Administrador";
-  const adminNombre = document.getElementById("adminNombre");
-  if (adminNombre) adminNombre.textContent = nombre;
-
-  // logout
-  const logoutBtn = document.getElementById("logoutBtn");
-  if (logoutBtn) logoutBtn.addEventListener("click", logout);
-});
+    const token = localStorage.getItem("token");
+  
+    if (!token) {
+      alert("Tu sesión ha expirado. Iniciá sesión nuevamente.");
+      window.location.href = "/login";
+      return;
+    }
+  
+    try {
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      if (payload.rol !== "ADMIN") {
+        alert("Acceso denegado. Solo administradores.");
+        window.location.href = "/login";
+        return;
+      }
+    } catch (e) {
+      console.error("Token inválido:", e);
+      localStorage.removeItem("token");
+      window.location.href = "/login";
+    }
+  });
+  

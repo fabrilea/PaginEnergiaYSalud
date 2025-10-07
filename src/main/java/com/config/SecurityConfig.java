@@ -28,18 +28,14 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                // 🔓 Páginas y recursos públicos
-                .requestMatchers("/", "/login", "/error", "/error/**").permitAll()
-                .requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
-
-                // 🔒 Rutas protegidas
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers("/usuario/**").hasAnyRole("USER", "ADMIN")
-
-                // 🔒 Todo lo demás requiere autenticación
-                .anyRequest().authenticated()
-            )
+            .requestMatchers("/", "/login", "/error", "/error/**").permitAll()
+            .requestMatchers("/auth/**", "/auth/login").permitAll()
+            .requestMatchers("/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
+            .requestMatchers("/admin/**").hasRole("ADMIN")
+            .requestMatchers("/usuario/**").hasAnyRole("USER", "ADMIN")
+            .anyRequest().authenticated()
+        )
+        
 
             // 🔒 Política stateless (sin sesión)
             .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
