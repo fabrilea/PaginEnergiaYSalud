@@ -56,3 +56,35 @@ export function checkToken(requiredRoles = null) {
     window.location.href = "/login";
   }
   
+  /**
+ * Envoltorio de fetch() que envía el token JWT automáticamente.
+ * 
+ * @param {string} url - Endpoint (por ejemplo: /admin/usuarios)
+ * @param {object} options - Configuración opcional (método, body, etc)
+ */
+export async function fetchWithAuth(url, options = {}) {
+    const token = localStorage.getItem("token");
+  
+    if (!token) {
+      window.location.href = "/login";
+      return;
+    }
+  
+    const headers = {
+      "Authorization": "Bearer " + token,
+      "Content-Type": "application/json",
+      ...options.headers
+    };
+  
+    const response = await fetch(url, { ...options, headers });
+  
+    // Si la sesión expira o el token no es válido → volver al login
+    if (response.status === 401 || response.status === 403) {
+      alert("Tu sesión ha expirado o no tienes permisos suficientes.");
+      localStorage.removeItem("token");
+      window.location.href = "/login";
+    }
+  
+    return response;
+  }
+  

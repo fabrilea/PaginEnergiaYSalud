@@ -1,5 +1,14 @@
 import { checkToken, logout } from "./auth.js";
 
+document.addEventListener("DOMContentLoaded", async () => {
+    try {
+      const res = await fetchWithAuth("/admin/usuarios");
+      const data = await res.json();
+      console.log("Usuarios:", data);
+    } catch (err) {
+      console.error("Error al cargar usuarios:", err);
+    }
+  });
 document.addEventListener("DOMContentLoaded", () => {
   const payload = checkToken("ADMIN");
   if (!payload) return;
