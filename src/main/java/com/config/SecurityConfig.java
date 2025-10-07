@@ -27,20 +27,21 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                // 🟢 Recursos públicos
-                .requestMatchers("/", "/login", "/error", "/error/**", "/auth/**").permitAll()
-                .requestMatchers("/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
-
-                // 🟢 Vistas principales (permitidas, se validan con JS)
-                .requestMatchers("/admin", "/usuario").permitAll()
-
-                // 🔒 Endpoints protegidos
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers("/usuario/**").hasAnyRole("USER", "ADMIN")
-
-                // 🔒 Todo lo demás requiere autenticación
-                .anyRequest().authenticated()
-            )
+            // 🟢 Públicos
+            .requestMatchers("/", "/login", "/error", "/error/**", "/auth/**").permitAll()
+            .requestMatchers("/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
+        
+            // 🟢 Vistas Thymeleaf (el control real lo hace auth.js)
+            .requestMatchers("/admin", "/admin/**", "/usuario", "/usuario/**").permitAll()
+        
+            // 🔒 API REST (solo si las tenés separadas)
+            .requestMatchers("/api/admin/**").hasRole("ADMIN")
+            .requestMatchers("/api/usuario/**").hasAnyRole("USER", "ADMIN")
+        
+            .anyRequest().authenticated()
+        )
+        
+        
 
             // 🚫 JWT → sin sesión
             .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

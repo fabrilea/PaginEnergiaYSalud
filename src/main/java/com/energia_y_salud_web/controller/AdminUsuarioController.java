@@ -4,7 +4,6 @@ import com.energia_y_salud_web.model.Rutina;
 import com.energia_y_salud_web.model.Usuario;
 import com.energia_y_salud_web.service.UsuarioService;
 import com.energia_y_salud_web.service.RutinaService;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +13,6 @@ import java.util.concurrent.TimeUnit;
 
 @Controller
 @RequestMapping("/admin/usuarios")
-@PreAuthorize("hasRole('ADMIN')")
 public class AdminUsuarioController {
 
     private final UsuarioService usuarioService;
