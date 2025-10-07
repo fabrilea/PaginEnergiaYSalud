@@ -1,39 +1,42 @@
 import { checkToken, logout, fetchWithAuth } from "./auth.js";
+import { showLoader, hideLoader } from "./loader.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
-  // ✅ 1. Verificar token y rol ADMIN
-  const payload = checkToken("ADMIN");
-  if (!payload) return;
+  showLoader(); // ⏳ Oculta contenido y muestra el loader visual
 
-  // ✅ 2. Mostrar el nombre del admin
-  const nombre = payload.nombre || payload.sub || payload.dni || "Administrador";
-  const adminNombre = document.getElementById("adminNombre");
-  if (adminNombre) adminNombre.textContent = nombre;
-
-  // ✅ 3. Agregar logout funcional
-  const logoutBtn = document.getElementById("logoutBtn");
-  if (logoutBtn) logoutBtn.addEventListener("click", logout);
-
-  // ✅ 4. Cargar datos de usuarios (ejemplo)
   try {
-    const res = await fetchWithAuth("/admin/usuarios/json"); // 👈 mejor usar endpoint JSON
-    if (!res.ok) {
-      console.warn("⚠️ No se pudieron cargar los usuarios. Código:", res.status);
-      return;
-    }
+    // ✅ 1. Verificar token y rol
+    const payload = checkToken("ADMIN");
+    if (!payload) return;
 
-    const usuarios = await res.json();
-    console.log("Usuarios cargados:", usuarios);
+    // ✅ 2. Mostrar nombre del admin
+    const nombre = payload.nombre || payload.sub || payload.dni || "Administrador";
+    const adminNombre = document.getElementById("adminNombre");
+    if (adminNombre) adminNombre.textContent = nombre;
 
-    // (opcional) mostrar en una lista:
-    const lista = document.getElementById("listaUsuarios");
-    if (lista) {
-      lista.innerHTML = usuarios.map(u =>
-        `<li>${u.nombre} ${u.apellido} - DNI: ${u.dni}</li>`
-      ).join("");
+    // ✅ 3. Logout funcional
+    const logoutBtn = document.getElementById("logoutBtn");
+    if (logoutBtn) logoutBtn.addEventListener("click", logout);
+
+    // ✅ 4. Cargar datos opcionales
+    try {
+      const res = await fetchWithAuth("/admin/usuarios/json");
+      if (res.ok) {
+        const usuarios = await res.json();
+        console.log("Usuarios cargados:", usuarios);
+      } else {
+        console.warn("⚠️ No se pudieron cargar los usuarios. Código:", res.status);
+      }
+    } catch (err) {
+      console.error("💥 Error al cargar usuarios:", err);
     }
 
   } catch (err) {
-    console.error("💥 Error al cargar usuarios:", err);
+    console.error("Error general en panel admin:", err);
+    localStorage.removeItem("token");
+    window.location.replace("/login");
+  } finally {
+    // ✅ 5. Mostrar contenido y ocultar loader
+    hideLoader();
   }
 });

@@ -1,24 +1,26 @@
 import { checkToken, logout } from "./auth.js";
+import { showLoader, hideLoader } from "./loader.js";
 
 document.addEventListener("DOMContentLoaded", () => {
+  showLoader(); // ⏳ Oculta contenido y muestra el spinner
+
   try {
-    // ✅ Verificar token y rol ADMIN
     const payload = checkToken("ADMIN");
     if (!payload) return;
 
-    // ✅ Mostrar nombre del admin
     const nombre = payload.nombre || payload.sub || "Administrador";
     const adminNombre = document.getElementById("adminNombre");
     if (adminNombre) adminNombre.textContent = nombre;
 
-    // ✅ Logout
     const logoutBtn = document.getElementById("logoutBtn");
     if (logoutBtn) logoutBtn.addEventListener("click", logout);
 
+    // ✅ Todo OK → mostrar contenido
+    hideLoader();
     console.log("✅ Sesión válida como ADMIN.");
   } catch (err) {
     console.error("Error al validar token:", err);
     localStorage.removeItem("token");
-    window.location.href = "/login";
+    window.location.replace("/login");
   }
 });
