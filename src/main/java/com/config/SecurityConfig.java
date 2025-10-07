@@ -6,14 +6,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandlerImpl;
+import org.springframework.security.web.AuthenticationEntryPoint;
 
 @Configuration
 @EnableMethodSecurity(prePostEnabled = true)
@@ -27,38 +27,27 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-            // 🟢 Públicos
-            .requestMatchers("/", "/login", "/error", "/error/**", "/auth/**").permitAll()
-            .requestMatchers("/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
-        
-            // 🟢 Vistas Thymeleaf (el control real lo hace auth.js)
-            .requestMatchers("/admin", "/admin/**", "/usuario", "/usuario/**").permitAll()
-        
-            // 🔒 API REST (solo si las tenés separadas)
-            .requestMatchers("/api/admin/**").hasRole("ADMIN")
-            .requestMatchers("/api/usuario/**").hasAnyRole("USER", "ADMIN")
-        
-            .anyRequest().authenticated()
-        )
-        
-        
+                // 🟢 Públicos
+                .requestMatchers("/", "/login", "/error", "/error/**", "/auth/**").permitAll()
+                .requestMatchers("/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
 
-            // 🚫 JWT → sin sesión
-            .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                // 🔒 Protegidos (vistas y API)
+                .requestMatchers("/admin", "/admin/**").hasRole("ADMIN")
+                .requestMatchers("/usuario", "/usuario/**").hasAnyRole("USER", "ADMIN")
 
-            // ⚠️ Manejo de errores visual con Thymeleaf
-            .exceptionHandling(ex -> ex
-                .authenticationEntryPoint(authenticationEntryPoint()) // sin token → login
-                .accessDeniedHandler(accessDeniedHandler())           // sin permiso → error
+                // 🔒 Otros
+                .anyRequest().authenticated()
             )
-
-            // 🔒 Agregar filtro JWT antes del auth estándar
+            .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .exceptionHandling(ex -> ex
+                .authenticationEntryPoint(authenticationEntryPoint())
+                .accessDeniedHandler(accessDeniedHandler())
+            )
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
-    // 🔸 403 → redirigir a /error (usa tu ErrorControllerImpl)
     @Bean
     public AccessDeniedHandler accessDeniedHandler() {
         AccessDeniedHandlerImpl handler = new AccessDeniedHandlerImpl();
@@ -66,7 +55,6 @@ public class SecurityConfig {
         return handler;
     }
 
-    // 🔸 401 → redirigir al login (solo si intenta acceder sin token)
     @Bean
     public AuthenticationEntryPoint authenticationEntryPoint() {
         return (request, response, authException) -> response.sendRedirect("/login");
