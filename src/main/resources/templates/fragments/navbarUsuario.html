@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-<div th:fragment="navbarNav">
+<div th:fragment="navbarUsuario"> <!-- 💡 Nombre corregido -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
     <div class="container-fluid">
       <a class="navbar-brand" th:href="@{/usuario/{dni}(dni=${usuario.dni})}">
@@ -41,7 +41,7 @@
         const payload = JSON.parse(atob(token.split(".")[1]));
         const nombre = payload.nombre || payload.sub || payload.dni || "Usuario";
 
-        const navUser = document.getElementById("navbarNav");
+        const navUser = document.getElementById("navUser"); // ✅ corregido
         if (navUser) navUser.textContent = `👤 ${nombre} (${payload.rol})`;
 
         const logoutBtn = document.getElementById("navLogoutBtn");
