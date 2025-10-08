@@ -9,10 +9,9 @@
 </head>
 
 <body id="mainBody" class="container py-3" style="display:none;">
-    <div th:replace="~{fragments/loader :: loader}"></div>
-  
 
-<div th:replace="~{fragments/navbarUsuario :: navbarUsuario}"></div>
+  <div th:replace="~{fragments/loader :: loader}"></div>
+  <div th:replace="~{fragments/navbarUsuario :: navbarUsuario}"></div>
 
   <h2 class="mb-4 text-center" th:text="${rutina.nombre}">Nombre de la rutina</h2>
   <p class="text-muted" th:text="${rutina.descripcion}">Descripción de la rutina</p>
@@ -40,7 +39,6 @@
 
   <hr>
 
-  <!-- Historial -->
   <div th:if="${usuario != null}">
     <h5>Historial de <span th:text="${usuario.nombre}"></span></h5>
 
@@ -63,7 +61,6 @@
       </tbody>
     </table>
 
-    <!-- Registrar nuevo historial -->
     <h6 class="mt-4">Registrar nuevo progreso</h6>
     <form th:action="@{/usuario/{dni}/rutina/{id}/historial(dni=${usuario.dni}, id=${rutina.id})}"
           method="post"
@@ -91,14 +88,14 @@
     </form>
   </div>
 
-  <!-- 🔙 Volver y salir -->
   <div class="mt-4 d-flex justify-content-between">
     <a th:href="@{/usuario/{dni}(dni=${usuario.dni})}" class="btn btn-secondary">Volver</a>
     <button id="salirBtn" class="btn btn-outline-danger">Cerrar sesión</button>
   </div>
 
-<script type="module" th:src="@{/js/usuario.js}"></script>
-<script th:src="@{/js/loader.js}"></script>
-<script th:src="@{/js/navbar.js}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="module" th:src="@{/js/usuario.js}"></script>
+  <script th:src="@{/js/loader.js}"></script>
+  <script th:src="@{/js/estaLogueado.js}"></script>
 </body>
 </html>
