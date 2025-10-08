@@ -1,13 +1,17 @@
+      
 document.addEventListener("DOMContentLoaded", () => {
-    const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
-    const navbarCollapse = document.querySelector(".navbar-collapse");
+  const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
+  const navbarCollapse = document.querySelector(".navbar-collapse");
 
-    navLinks.forEach(link => {
-        link.addEventListener("click", () => {
-            // Solo cerrar si está abierto
-            if (navbarCollapse.classList.contains("show")) {
-                new bootstrap.Collapse(navbarCollapse).toggle();
-            }
-        });
+  if (!navLinks.length || !navbarCollapse) return;
+
+  navLinks.forEach(link => {
+    link.addEventListener("click", () => {
+      // Solo cerrar si bootstrap está cargado y el menú está abierto
+      if (typeof bootstrap !== "undefined" && navbarCollapse.classList.contains("show")) {
+        new bootstrap.Collapse(navbarCollapse).toggle();
+      }
     });
+  });
 });
+
