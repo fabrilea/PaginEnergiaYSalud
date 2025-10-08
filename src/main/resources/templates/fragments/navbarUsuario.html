@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-<div th:fragment="navbarUsuario">
+<div th:fragment="navbarNav">
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
     <div class="container-fluid">
       <a class="navbar-brand" th:href="@{/usuario/{dni}(dni=${usuario.dni})}">
@@ -9,11 +9,11 @@
       </a>
 
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarUser"
-              aria-controls="navbarUser" aria-expanded="false" aria-label="Toggle navigation">
+              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <div class="collapse navbar-collapse" id="navbarUser">
+      <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto">
           <li class="nav-item">
             <a class="nav-link" th:href="@{/usuario/{dni}(dni=${usuario.dni})}">Mis Rutinas</a>
@@ -41,7 +41,7 @@
         const payload = JSON.parse(atob(token.split(".")[1]));
         const nombre = payload.nombre || payload.sub || payload.dni || "Usuario";
 
-        const navUser = document.getElementById("navUser");
+        const navUser = document.getElementById("navbarNav");
         if (navUser) navUser.textContent = `👤 ${nombre} (${payload.rol})`;
 
         const logoutBtn = document.getElementById("navLogoutBtn");
