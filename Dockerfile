@@ -1,17 +1,18 @@
-# Usa una imagen ligera de Java 17
 FROM openjdk:17-jdk-slim
 
-# Establece el directorio de trabajo dentro del contenedor
 WORKDIR /app
 
-# Copia el código fuente al contenedor
+# Instala Maven manualmente
+RUN apt-get update && apt-get install -y maven
+
+# Copia todo el código al contenedor
 COPY . .
 
-# Compila el proyecto con Maven (usa el wrapper si existe)
-RUN ./mvnw clean package -DskipTests || mvn clean package -DskipTests
+# Compila el proyecto
+RUN mvn clean package -DskipTests
 
-# Expone el puerto que usará tu app
+# Expone el puerto
 EXPOSE 8080
 
-# Ejecuta el jar
+# Ejecuta el jar generado
 CMD ["java", "-jar", "target/energia_y_salud_web-0.0.1-SNAPSHOT.jar"]
